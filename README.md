@@ -3,6 +3,7 @@
 
 > 生活不是缺一个万能助手，而是缺几个真正在乎你的朋友。
 
+<video src="你的视频链接.mp4" width="100%" controls autoplay loop muted></video>
 
 ## 介绍
 
