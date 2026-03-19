@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猫眼巷 — 三个青梅竹马帮你把日子过好</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f8f7f4;--card:#ffffff;--chat-bg:#f2f1ee;
+  --msg-bg:#e8e7e3;--msg-self:#4a6cf7;
+  --t1:#1a1a2e;--t2:#6b6b80;--t3:#9b9bab;
+  --border:#e0dfd8;
+  --lm:#e85586;--lq:#3aaf55;--yg:#5a7ee6;
+}
+body{background:var(--bg);color:var(--t1);font-family:'Noto Sans SC',sans-serif;overflow-x:hidden}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+
+/* ===== FULL PAGE SECTIONS ===== */
+.page{min-height:100vh;scroll-snap-align:start;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* ===== PAGE 0: HERO ===== */
+.hero{flex-direction:column;text-align:center}
+.hero::before{content:'';position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(232,85,134,.08),transparent 60%);top:-300px;right:-300px;pointer-events:none}
+.hero::after{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(90,126,230,.06),transparent 60%);bottom:-200px;left:-200px;pointer-events:none}
+.hero-badge{font-size:11px;color:var(--t3);letter-spacing:8px;text-transform:uppercase;opacity:0;animation:fu .8s ease forwards .2s}
+.hero-title{font-family:'ZCOOL KuaiLe',cursive;font-size:clamp(56px,10vw,100px);background:linear-gradient(135deg,var(--lm),var(--yg));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1;margin:16px 0;opacity:0;animation:fu .8s ease forwards .4s}
+.hero-sub{font-size:20px;color:var(--t2);font-weight:300;opacity:0;animation:fu .8s ease forwards .6s}
+.hero-hint{position:absolute;bottom:48px;font-size:12px;color:var(--t3);letter-spacing:3px;opacity:0;animation:fu .8s ease forwards 1.2s}
+.hero-hint span{display:block;margin-top:8px;animation:bounce 2s infinite}
+
+/* ===== CHARACTER PAGES ===== */
+.char-page{padding:0 80px;gap:80px}
+.char-left{flex:1;max-width:480px}
+.char-right{flex:1;display:flex;align-items:center;justify-content:center}
+
+.char-num{font-size:120px;font-weight:900;line-height:1;opacity:.05;position:absolute;top:40px;left:60px;font-family:'ZCOOL KuaiLe',cursive}
+.char-icon{width:200px;height:200px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;overflow:hidden}
+.char-icon img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.char-icon::after{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid;opacity:.2}
+
+.char-badge{font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-bottom:12px}
+.char-name{font-size:clamp(40px,6vw,64px);font-weight:700;line-height:1.1;margin-bottom:8px}
+.char-title{font-size:18px;margin-bottom:32px}
+.char-desc{font-size:15px;color:var(--t2);line-height:2;margin-bottom:36px}
+
+.char-abilities{display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+.char-ab{display:flex;align-items:center;gap:12px;font-size:14px}
+.char-ab-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.char-ab-text{color:var(--t2)}
+.char-ab-text strong{color:var(--t1);font-weight:500}
+
+.char-quote{padding:20px 24px;border-radius:16px;font-size:15px;line-height:1.8;border-left:3px solid;position:relative}
+
+/* Color themes */
+.pg-lm .char-num,.pg-lm .char-badge,.pg-lm .char-name{color:var(--lm)}
+.pg-lm .char-title{color:rgba(232,85,134,.55)}
+.pg-lm .char-icon{background:rgba(232,85,134,.06)}
+.pg-lm .char-icon::after{border-color:var(--lm)}
+.pg-lm .char-ab-dot{background:var(--lm)}
+.pg-lm .char-quote{background:rgba(232,85,134,.05);border-color:var(--lm);color:rgba(232,85,134,.85)}
+
+.pg-lq .char-num,.pg-lq .char-badge,.pg-lq .char-name{color:var(--lq)}
+.pg-lq .char-title{color:rgba(58,175,85,.55)}
+.pg-lq .char-icon{background:rgba(58,175,85,.06)}
+.pg-lq .char-icon::after{border-color:var(--lq)}
+.pg-lq .char-ab-dot{background:var(--lq)}
+.pg-lq .char-quote{background:rgba(58,175,85,.05);border-color:var(--lq);color:rgba(58,175,85,.85)}
+
+.pg-yg .char-num,.pg-yg .char-badge,.pg-yg .char-name{color:var(--yg)}
+.pg-yg .char-title{color:rgba(90,126,230,.55)}
+.pg-yg .char-icon{background:rgba(90,126,230,.06)}
+.pg-yg .char-icon::after{border-color:var(--yg)}
+.pg-yg .char-ab-dot{background:var(--yg)}
+.pg-yg .char-quote{background:rgba(90,126,230,.05);border-color:var(--yg);color:rgba(90,126,230,.85)}
+
+/* Reveal animation */
+.rv{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+.rv.s{opacity:1;transform:translateY(0)}
+.rv-d1{transition-delay:.1s}.rv-d2{transition-delay:.2s}.rv-d3{transition-delay:.3s}.rv-d4{transition-delay:.4s}.rv-d5{transition-delay:.5s}.rv-d6{transition-delay:.6s}
+
+/* ===== PHILOSOPHY PAGE ===== */
+.mech-page{flex-direction:column;padding:60px 80px;gap:48px;text-align:center}
+.mech-title{font-size:32px;font-weight:700;background:linear-gradient(135deg,var(--lm),var(--yg));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.mech-sub{font-size:15px;color:var(--t2);text-align:center;max-width:600px;line-height:2}
+.phil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:840px;width:100%}
+.phil-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:left;transition:border-color .3s,transform .3s}
+.phil-card:hover{border-color:rgba(0,0,0,.1);transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.04)}
+.phil-card-icon{font-size:24px;margin-bottom:16px;display:block}
+.phil-card h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--t1)}
+.phil-card p{font-size:13px;color:var(--t2);line-height:1.8}
+.phil-card:nth-child(1) h3{color:var(--lm)}
+.phil-card:nth-child(2) h3{color:var(--lq)}
+.phil-card:nth-child(3) h3{color:var(--yg)}
+.mech-cta{padding:16px 56px;border:none;background:linear-gradient(135deg,var(--lm),var(--yg));color:#fff;font-size:16px;font-weight:500;border-radius:32px;cursor:pointer;transition:transform .2s,box-shadow .2s;font-family:'Noto Sans SC',sans-serif}
+.mech-cta:hover{transform:scale(1.05);box-shadow:0 8px 32px rgba(232,85,134,.2)}
+
+/* ===== DEMO PAGE ===== */
+.demo-page{height:100vh;display:none;scroll-snap-align:start}
+.demo-page.act{display:flex}
+.sidebar{width:260px;background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column}
+.sb-head{padding:20px;border-bottom:1px solid var(--border)}
+.sb-head h2{font-family:'ZCOOL KuaiLe',cursive;font-size:18px;background:linear-gradient(135deg,var(--lm),var(--yg));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sb-head p{font-size:10px;color:var(--t3);margin-top:4px;letter-spacing:2px}
+.cl{flex:1;padding:8px}
+.ci{display:flex;align-items:center;gap:10px;padding:12px;border-radius:10px;cursor:pointer;transition:background .2s;position:relative}
+.ci:hover,.ci.on{background:rgba(0,0,0,.03)}
+.ci.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;border-radius:2px}
+.ci[data-r="lm"].on::before{background:var(--lm)}
+.ci[data-r="lq"].on::before{background:var(--lq)}
+.ci[data-r="yg"].on::before{background:var(--yg)}
+.ci-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;overflow:hidden}
+.ci-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.ci-nm{font-size:13px;font-weight:500}
+.ci-pv{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;max-width:130px}
+.ci-tm{font-size:10px;color:var(--t3)}
+.ci-bd{width:16px;height:16px;border-radius:50%;font-size:9px;display:none;align-items:center;justify-content:center;color:#fff;margin-top:3px;margin-left:auto}
+.ci-bd.sh{display:flex}
+
+.chat{flex:1;display:flex;flex-direction:column;background:var(--chat-bg)}
+.ch{padding:14px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ch-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;overflow:hidden}
+.ch-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.ch-nm{font-size:14px;font-weight:500}
+.ch-dc{font-size:10px;color:var(--t3)}
+.ms{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px}
+.dd{text-align:center;font-size:10px;color:var(--t3);padding:6px 0;position:relative}
+.dd::before,.dd::after{content:'';position:absolute;top:50%;width:calc(50% - 44px);height:1px;background:var(--border)}
+.dd::before{left:0}.dd::after{right:0}
+.mg{display:flex;gap:8px;max-width:70%;opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+.mg.v{opacity:1;transform:translateY(0)}
+.mg.sf{flex-direction:row-reverse;align-self:flex-end}
+.ma{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;overflow:hidden}
+.ma img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.mn{font-size:10px;color:var(--t3);margin-bottom:2px}
+.sf .mn{text-align:right}
+.mb{padding:9px 13px;border-radius:14px;font-size:13px;line-height:1.6}
+.mb.ot{background:var(--msg-bg);border-top-left-radius:3px}
+.mb.me{background:var(--msg-self);border-top-right-radius:3px;color:#fff}
+.mt{font-size:9px;color:var(--t3);margin-top:2px}
+.sf .mt{text-align:right}
+.tp{display:flex;gap:8px;max-width:70%;opacity:0;transition:opacity .3s}
+.tp.v{opacity:1}
+.td{display:flex;gap:4px;padding:10px 14px;background:var(--msg-bg);border-radius:14px;border-top-left-radius:3px}
+.td span{width:5px;height:5px;border-radius:50%;background:#aaa;animation:tb 1.4s infinite}
+.td span:nth-child(2){animation-delay:.2s}
+.td span:nth-child(3){animation-delay:.4s}
+.me-ev{text-align:center;padding:8px;opacity:0;transform:scale(.95);transition:opacity .5s,transform .5s}
+.me-ev.v{opacity:1;transform:scale(1)}
+.me-tg{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--yg);background:rgba(90,126,230,.08);padding:5px 12px;border-radius:16px;border:1px solid rgba(90,126,230,.15)}
+.ib{padding:10px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--t3)}
+#inputField:focus{outline:none;border-color:var(--msg-self)}
+#inputField .cursor-blink{display:inline-block;width:1.5px;height:14px;background:var(--t1);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:1px}
+.phil-card{box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.sidebar{box-shadow:1px 0 8px rgba(0,0,0,.03)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+
+.bg-lm{background:rgba(232,85,134,.1)}.bg-lq{background:rgba(58,175,85,.1)}.bg-yg{background:rgba(90,126,230,.1)}.bg-u{background:rgba(200,170,100,.1)}
+.tx-lm{color:var(--lm)}.tx-lq{color:var(--lq)}.tx-yg{color:var(--yg)}
+
+/* Nav dots */
+.nav-dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:40}
+.nav-dot{width:8px;height:8px;border-radius:50%;border:1px solid #ccc;background:transparent;cursor:pointer;transition:all .3s;padding:0}
+.nav-dot.on{background:var(--lm);border-color:var(--lm);transform:scale(1.3)}
+
+@keyframes fu{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#ccc;border-radius:2px}
+
+@media(max-width:900px){
+  .char-page{flex-direction:column;padding:40px 24px;gap:40px;text-align:center}
+  .char-num{font-size:80px;left:20px}
+  .char-icon{width:140px;height:140px;font-size:56px}
+  .phil-grid{grid-template-columns:1fr;max-width:400px}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav dots -->
+<div class="nav-dots" id="navDots">
+  <button class="nav-dot on" onclick="goTo(0)"></button>
+  <button class="nav-dot" onclick="goTo(1)"></button>
+  <button class="nav-dot" onclick="goTo(2)"></button>
+  <button class="nav-dot" onclick="goTo(3)"></button>
+  <button class="nav-dot" onclick="goTo(4)"></button>
+</div>
+
+<!-- PAGE 0: HERO -->
+<section class="page hero" id="p0">
+  <div class="hero-badge">OpenClaw Multi-Agent 生活陪伴系统</div>
+  <h1 class="hero-title">猫眼巷</h1>
+  <p class="hero-sub">三个青梅竹马帮你把日子过好</p>
+  <div class="hero-hint">向下滚动<span>↓</span></div>
+</section>
+
+<!-- PAGE 1: 灵猫 -->
+<section class="page char-page pg-lm" id="p1">
+  <div class="char-num">01</div>
+  <div class="char-left">
+    <div class="char-badge rv">Agent 01</div>
+    <h2 class="char-name rv rv-d1">灵猫</h2>
+    <div class="char-title rv rv-d2">生活的发现者</div>
+    <div class="char-desc rv rv-d3">二次元宅女，四人组里话最多的那个。说话犀利幽默，永远精力充沛。她的使命是不让你的日子变得无聊——总能在你最需要的时候甩出一个完美的推荐。</div>
+    <div class="char-abilities rv rv-d4">
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>内容推荐</strong> — 番剧、游戏、音乐、活动</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>周末规划</strong> — 帮你把空闲时间变好玩</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>情绪急救</strong> — 用快乐治愈你的疲惫</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>兴趣雷达</strong> — 记住你喜欢什么，推荐越来越准</div></div>
+    </div>
+    <div class="char-quote rv rv-d5">"不是吧你周末又打算躺平？？我刚发现一个超棒的独立游戏你一定喜欢 ᕕ( ᐛ )ᕗ"</div>
+  </div>
+  <div class="char-right rv rv-d3">
+    <div class="char-icon"><img src="灵猫.jpeg" alt="灵猫"></div>
+  </div>
+</section>
+
+<!-- PAGE 2: 鹿青 -->
+<section class="page char-page pg-lq" id="p2">
+  <div class="char-num">02</div>
+  <div class="char-left">
+    <div class="char-badge rv">Agent 02</div>
+    <h2 class="char-name rv rv-d1">鹿青</h2>
+    <div class="char-title rv rv-d2">关系的维护者</div>
+    <div class="char-desc rv rv-d3">温柔的大姐姐，现充，和蔼可亲。她会默默记住你提过的每一个重要的人和每一个重要的日子，在你快要忘记的时候，轻轻提醒你。</div>
+    <div class="char-abilities rv rv-d4">
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>日期守护</strong> — 家人朋友的生日、纪念日</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>社交提醒</strong> — 该联系谁了、该赴约了</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>生活关怀</strong> — 饮食起居、健康习惯</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>礼物参谋</strong> — 节日送什么、祝福怎么写</div></div>
+    </div>
+    <div class="char-quote rv rv-d5">"你妈妈生日下周三哦～上次你说她最近喜欢养花，要不送一盆好看的多肉？"</div>
+  </div>
+  <div class="char-right rv rv-d3">
+    <div class="char-icon"><img src="鹿青.jpeg" alt="鹿青"></div>
+  </div>
+</section>
+
+<!-- PAGE 3: 雨宫澄 -->
+<section class="page char-page pg-yg" id="p3">
+  <div class="char-num">03</div>
+  <div class="char-left">
+    <div class="char-badge rv">Agent 03</div>
+    <h2 class="char-name rv rv-d1">雨宫澄</h2>
+    <div class="char-title rv rv-d2">决策的参谋</div>
+    <div class="char-desc rv rv-d3">电波系学霸，安静低调，私下是同人文写手。话不多但每句说到点上。在你纠结的时候，她是最冷静的第二大脑——帮你看清楚，但从不替你做决定。</div>
+    <div class="char-abilities rv rv-d4">
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>利弊分析</strong> — 帮你把纠结的事理清楚</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>事项跟进</strong> — 记住你的纠结，过几天主动问</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>成本计算</strong> — 花多少钱、值不值、有没有替代方案</div></div>
+      <div class="char-ab"><div class="char-ab-dot"></div><div class="char-ab-text"><strong>学习路线</strong> — 想学新东西时帮你规划路径</div></div>
+    </div>
+    <div class="char-quote rv rv-d5">"……先买入门琴试错，确认喜欢了再报课。成本低五倍。"</div>
+  </div>
+  <div class="char-right rv rv-d3">
+    <div class="char-icon"><img src="雨宫澄.jpeg" alt="雨宫澄"></div>
+  </div>
+</section>
+
+<!-- PAGE 4: PHILOSOPHY + CTA -->
+<section class="page mech-page" id="p4">
+  <div class="mech-title rv">不是工具，是朋友</div>
+  <div class="mech-sub rv rv-d1">我们相信陪伴不该千篇一律。猫眼巷的三个角色共享记忆、各司其职，像真正的朋友一样围绕你的生活运转。</div>
+  <div class="phil-grid rv rv-d2">
+    <div class="phil-card">
+      <span class="phil-card-icon">✦</span>
+      <h3>个性化定制陪伴</h3>
+      <p>不是一个万能助手，而是三个性格鲜明的朋友。她们记住你的喜好、习惯和情绪，陪伴越久越懂你。</p>
+    </div>
+    <div class="phil-card">
+      <span class="phil-card-icon">✦</span>
+      <h3>接入真实生活</h3>
+      <p>记住你妈妈的生日、你纠结了三天的决定、你上周说想学的吉他——然后在合适的时候，主动出现。</p>
+    </div>
+    <div class="phil-card">
+      <span class="phil-card-icon">✦</span>
+      <h3>共享记忆，自然流动</h3>
+      <p>你跟一个人聊过的事，其他人也会知道。不是监控，是朋友之间本来就会互相关心。</p>
+    </div>
+  </div>
+  <button class="mech-cta rv rv-d3" onclick="startDemo()">观看对话演示 →</button>
+</section>
+
+<!-- DEMO -->
+<section class="demo-page" id="demoPage">
+  <div class="sidebar">
+    <div class="sb-head"><h2>猫眼巷</h2><p>MULTI-AGENT DEMO</p></div>
+    <div class="cl" id="chatList">
+      <div class="ci on" data-r="lm" onclick="sw('lm')"><div class="ci-av bg-lm"><img src="灵猫.jpeg" alt="灵猫"></div><div class="ci-info" style="flex:1;min-width:0"><div class="ci-nm tx-lm">灵猫</div><div class="ci-pv" id="pv-lm">等待开始…</div></div><div><div class="ci-tm" id="tm-lm"></div><div class="ci-bd bg-lm" id="bd-lm"></div></div></div>
+      <div class="ci" data-r="lq" onclick="sw('lq')"><div class="ci-av bg-lq"><img src="鹿青.jpeg" alt="鹿青"></div><div class="ci-info" style="flex:1;min-width:0"><div class="ci-nm tx-lq">鹿青</div><div class="ci-pv" id="pv-lq">暂无消息</div></div><div><div class="ci-tm" id="tm-lq"></div><div class="ci-bd bg-lq" id="bd-lq"></div></div></div>
+      <div class="ci" data-r="yg" onclick="sw('yg')"><div class="ci-av bg-yg"><img src="雨宫澄.jpeg" alt="雨宫澄"></div><div class="ci-info" style="flex:1;min-width:0"><div class="ci-nm tx-yg">雨宫澄</div><div class="ci-pv" id="pv-yg">暂无消息</div></div><div><div class="ci-tm" id="tm-yg"></div><div class="ci-bd bg-yg" id="bd-yg"></div></div></div>
+    </div>
+  </div>
+  <div class="chat">
+    <div class="ch"><div class="ch-av bg-lm" id="hA"><img src="灵猫.jpeg" alt="灵猫"></div><div><div class="ch-nm tx-lm" id="hN">灵猫</div><div class="ch-dc" id="hD">生活的发现者 · 在线</div></div></div>
+    <div class="ms" id="ms"></div>
+    <div class="ib" id="inputBar">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="inputField" style="flex:1;background:#fff;border:1px solid var(--border);border-radius:20px;padding:8px 16px;font-size:13px;color:var(--t1);min-height:20px;cursor:text;font-family:'Noto Sans SC',sans-serif;transition:border-color .2s;white-space:pre-wrap;word-break:break-all" contenteditable="false"></div>
+        <button id="sendBtn" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--msg-self);color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.4;transition:opacity .2s,transform .2s;flex-shrink:0" disabled>↑</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+const USER_AV="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23c8a864'/%3E%3Cstop offset='100%25' stop-color='%23d4956a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='80' height='80' rx='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='30' r='14' fill='%23fff' opacity='.9'/%3E%3Cellipse cx='40' cy='68' rx='22' ry='18' fill='%23fff' opacity='.9'/%3E%3C/svg%3E";
+const R={lm:{n:'灵猫',img:'灵猫.jpeg',bg:'bg-lm',tx:'tx-lm',d:'生活的发现者 · 在线'},lq:{n:'鹿青',img:'鹿青.jpeg',bg:'bg-lq',tx:'tx-lq',d:'关系的维护者 · 在线'},yg:{n:'雨宫澄',img:'雨宫澄.jpeg',bg:'bg-yg',tx:'tx-yg',d:'决策的参谋 · 在线'},u:{n:'我',img:USER_AV,bg:'bg-u'}};
+function avHTML(role){const i=R[role];return i.img?`<img src="${i.img}" alt="${i.n}">`:(i.e||'')};
+
+const S=[
+  {t:'sw',ch:'lm'},{t:'d',text:'周一 21:30'},
+  {t:'m',ch:'lm',r:'u',text:'灵猫在吗，好累啊今天',time:'21:32'},
+  {t:'tp',ch:'lm',dur:1500},
+  {t:'m',ch:'lm',r:'lm',text:'怎么了怎么了！又加班了？？',time:'21:32'},
+  {t:'m',ch:'lm',r:'u',text:'连续加班一周了 感觉自己要废了',time:'21:33'},
+  {t:'tp',ch:'lm',dur:2000},
+  {t:'m',ch:'lm',r:'lm',text:'不是吧一周！！你们老板是不是有什么大病 (╯°□°)╯',time:'21:33'},
+  {t:'m',ch:'lm',r:'lm',text:'这样不行 你需要回血。我昨晚刚看完一部番超治愈的，叫《葬送的芙莉莲》你看过吗',time:'21:34'},
+  {t:'m',ch:'lm',r:'u',text:'没看过 什么类型的',time:'21:34'},
+  {t:'m',ch:'lm',r:'lm',text:'奇幻冒险但是节奏很慢很治愈！讲一个精灵在漫长时间里学会理解人类感情的故事。你现在这个状态看最合适了，信我 ᕕ( ᐛ )ᕗ',time:'21:35'},
+  {t:'m',ch:'lm',r:'u',text:'行 周末试试看',time:'21:35'},
+  {t:'m',ch:'lm',r:'lm',text:'周末不准加班！！我盯着你',time:'21:36'},
+  {t:'ev',text:'🧠 共享记忆写入：灵猫获知用户连续加班一周'},
+
+  {t:'p',dur:2500},
+  {t:'sw',ch:'lq'},{t:'d',text:'周三 12:15 · 鹿青主动发来消息'},
+  {t:'tp',ch:'lq',dur:2000},
+  {t:'m',ch:'lq',r:'lq',text:'中午好呀～吃饭了吗？',time:'12:15'},
+  {t:'m',ch:'lq',r:'u',text:'还没 正准备点外卖',time:'12:16'},
+  {t:'tp',ch:'lq',dur:1800},
+  {t:'m',ch:'lq',r:'lq',text:'最近是不是特别忙呀？感觉你好久没好好吃过饭了，别老是外卖凑合嘛',time:'12:17'},
+  {t:'m',ch:'lq',r:'u',text:'哈哈你怎么知道的',time:'12:17'},
+  {t:'tp',ch:'lq',dur:1500},
+  {t:'m',ch:'lq',r:'lq',text:'我还能不了解你嘛～对了，你妈妈生日是下周三哦，要不要提前想想送什么？上次你说她最近喜欢养花来着',time:'12:18'},
+  {t:'m',ch:'lq',r:'u',text:'啊对！差点忘了！谢谢你提醒',time:'12:18'},
+  {t:'m',ch:'lq',r:'lq',text:'要不送一盆好看的多肉？我知道一家店评价特别好，要我帮你找找吗～',time:'12:19'},
+  {t:'ev',text:'🧠 鹿青通过共享记忆得知用户很累，主动关心'},
+
+  {t:'p',dur:2500},
+  {t:'sw',ch:'yg'},{t:'d',text:'周四 20:40 · 雨宫澄主动跟进'},
+  {t:'tp',ch:'yg',dur:2500},
+  {t:'m',ch:'yg',r:'yg',text:'……上次说在考虑要不要报那个吉他课，想清楚了吗',time:'20:41'},
+  {t:'m',ch:'yg',r:'u',text:'还在纠结 主要觉得有点贵',time:'20:42'},
+  {t:'tp',ch:'yg',dur:3000},
+  {t:'m',ch:'yg',r:'yg',text:'我帮你算了一下。线下课均价200/节，一期12节大概2400。但如果只是想入门弹唱的话，其实有个替代方案',time:'20:43'},
+  {t:'m',ch:'yg',r:'yg',text:'先买一把入门琴500左右，B站上跟免费教程学基础指法，大概2个月能弹简单的歌。确认自己真的喜欢了再报课。试错成本只有五分之一',time:'20:44'},
+  {t:'m',ch:'yg',r:'u',text:'……你怎么连这个都帮我想好了',time:'20:44'},
+  {t:'m',ch:'yg',r:'yg',text:'……因为你上次纠结的表情很好笑',time:'20:45'},
+
+  {t:'p',dur:2500},
+  {t:'sw',ch:'lm'},{t:'d',text:'周五 18:00 · 灵猫心跳触发'},
+  {t:'tp',ch:'lm',dur:1200},
+  {t:'m',ch:'lm',r:'lm',text:'周！末！了！！！',time:'18:00'},
+  {t:'m',ch:'lm',r:'lm',text:'这周你不准加班 我说的',time:'18:00'},
+  {t:'tp',ch:'lm',dur:1500},
+  {t:'m',ch:'lm',r:'lm',text:'对了听说你决定学吉他了？？学会了以后要给我弹OP (ง •_•)ง',time:'18:01'},
+  {t:'m',ch:'lm',r:'u',text:'哈哈哈还没决定呢！不过雨宫澄帮我想了个省钱的方案',time:'18:02'},
+  {t:'m',ch:'lm',r:'lm',text:'雨宫做事一贯靠谱（虽然她本人不太靠谱的样子）',time:'18:02'},
+  {t:'tp',ch:'lm',dur:1500},
+  {t:'m',ch:'lm',r:'lm',text:'对了！明天市中心有个独立音乐节，免费的！要不要去逛逛？说不定能激发你的吉他之魂 ᕕ( ᐛ )ᕗ',time:'18:03'},
+  {t:'ev',text:'🧠 灵猫通过共享记忆得知吉他课的事，自然提起'},
+];
+
+let cur='lm',mg={lm:[],lq:[],yg:[]},si=0,pa=false,tm=null;
+let waitingForInput=false,pendingUserText='',typedChars=0;
+
+function startDemo(){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById('navDots').style.display='none';
+  const d=document.getElementById('demoPage');
+  d.style.display='flex';d.classList.add('act');
+  document.body.style.overflow='hidden';
+  document.documentElement.style.scrollSnapType='none';
+  setTimeout(()=>pN(),800);
+}
+
+function sw(r){
+  cur=r;
+  document.querySelectorAll('.ci').forEach(e=>e.classList.remove('on'));
+  document.querySelector(`.ci[data-r="${r}"]`).classList.add('on');
+  const i=R[r];
+  document.getElementById('hA').className=`ch-av ${i.bg}`;
+  document.getElementById('hA').innerHTML=avHTML(r);
+  document.getElementById('hN').textContent=i.n;
+  document.getElementById('hN').className=`ch-nm ${i.tx}`;
+  document.getElementById('hD').textContent=i.d;
+  const b=document.getElementById(`bd-${r}`);if(b){b.classList.remove('sh');b.textContent=''}
+  rM(r);
+}
+
+function rM(r){const c=document.getElementById('ms');c.innerHTML='';mg[r].forEach(m=>{c.appendChild(m.el);requestAnimationFrame(()=>m.el.classList.add('v'))});c.scrollTop=c.scrollHeight}
+
+function aM(ch,role,text,time){
+  const u=role==='u',i=R[role],d=document.createElement('div');
+  d.className=`mg ${u?'sf':''}`;
+  d.innerHTML=`<div class="ma ${i.bg}">${avHTML(role)}</div><div style="min-width:0"><div class="mn">${i.n}</div><div class="mb ${u?'me':'ot'}">${text}</div><div class="mt">${time}</div></div>`;
+  mg[ch].push({el:d});
+  const pv=document.getElementById(`pv-${ch}`),t=document.getElementById(`tm-${ch}`);
+  if(pv)pv.textContent=text.slice(0,16)+(text.length>16?'…':'');
+  if(t)t.textContent=time;
+  if(cur===ch){const c=document.getElementById('ms');c.appendChild(d);requestAnimationFrame(()=>{d.classList.add('v');c.scrollTop=c.scrollHeight})}
+  else{const b=document.getElementById(`bd-${ch}`);if(b){const n=parseInt(b.textContent||'0')+1;b.textContent=n;b.classList.add('sh')}}
+}
+
+function aD(ch,text){const d=document.createElement('div');d.className='dd';d.textContent=text;mg[ch].push({el:d});if(cur===ch)document.getElementById('ms').appendChild(d)}
+
+function sT(ch,role){
+  if(cur!==ch)return null;const rl=role||'lm',i=R[rl],c=document.getElementById('ms'),d=document.createElement('div');
+  d.className='tp';d.innerHTML=`<div class="ma ${i.bg}">${avHTML(rl)}</div><div class="td"><span></span><span></span><span></span></div>`;
+  c.appendChild(d);requestAnimationFrame(()=>{d.classList.add('v');c.scrollTop=c.scrollHeight});return d
+}
+
+function aE(ch,text){
+  const d=document.createElement('div');d.className='me-ev';d.innerHTML=`<div class="me-tg">${text}</div>`;
+  mg[ch].push({el:d});if(cur===ch){const c=document.getElementById('ms');c.appendChild(d);requestAnimationFrame(()=>{d.classList.add('v');c.scrollTop=c.scrollHeight})}
+}
+
+function pN(){
+  if(pa||si>=S.length)return;
+  const s=S[si];
+  // If this is a user message, wait for keyboard input
+  if(s.t==='m'&&s.r==='u'){
+    waitingForInput=true;
+    pendingUserText=s.text;
+    typedChars=0;
+    const field=document.getElementById('inputField');
+    field.innerHTML='<span class="cursor-blink"></span>';
+    field.style.borderColor='var(--msg-self)';
+    document.getElementById('sendBtn').style.opacity='.4';
+    document.getElementById('sendBtn').disabled=true;
+    return; // Wait for keystrokes
+  }
+  si++;
+  let dl=600;
+  switch(s.t){
+    case'sw':sw(s.ch);dl=500;break;
+    case'd':aD(s.ch||cur,s.text);dl=400;break;
+    case'm':aM(s.ch,s.r,s.text,s.time);dl=s.r==='u'?800:1200;break;
+    case'tp':{const ch=s.ch,nx=S.slice(si).find(x=>x.t==='m'&&x.r!=='u');const el=sT(ch,nx?nx.r:'lm');dl=s.dur||1500;setTimeout(()=>{if(el)el.remove()},dl-200);break}
+    case'ev':aE(cur,s.text);dl=1800;break;
+    case'p':dl=s.dur||2000;break;
+  }
+  tm=setTimeout(()=>pN(),dl);
+}
+
+function sendCurrentMessage(){
+  if(!waitingForInput)return;
+  const s=S[si];
+  aM(s.ch,s.r,s.text,s.time);
+  si++;
+  waitingForInput=false;
+  pendingUserText='';
+  typedChars=0;
+  const field=document.getElementById('inputField');
+  field.innerHTML='';
+  field.style.borderColor='var(--border)';
+  document.getElementById('sendBtn').style.opacity='.4';
+  document.getElementById('sendBtn').disabled=true;
+  // Continue auto-play after a short pause
+  tm=setTimeout(()=>pN(),600);
+}
+
+// Keyboard input handler
+document.addEventListener('keydown',function(e){
+  if(!waitingForInput)return;
+  if(e.key==='Enter'){
+    e.preventDefault();
+    if(typedChars>0)sendCurrentMessage();
+    return;
+  }
+  if(e.key==='Backspace'){
+    e.preventDefault();
+    if(typedChars>0){
+      typedChars--;
+      const field=document.getElementById('inputField');
+      const shown=pendingUserText.slice(0,typedChars);
+      field.innerHTML=shown+'<span class="cursor-blink"></span>';
+      if(typedChars===0){
+        document.getElementById('sendBtn').style.opacity='.4';
+        document.getElementById('sendBtn').disabled=true;
+      }
+    }
+    return;
+  }
+  // Ignore modifier keys and special keys
+  if(e.key.length>1&&e.key!=='Spacebar')return;
+  e.preventDefault();
+  if(typedChars<pendingUserText.length){
+    typedChars++;
+    const field=document.getElementById('inputField');
+    const shown=pendingUserText.slice(0,typedChars);
+    field.innerHTML=shown+'<span class="cursor-blink"></span>';
+    document.getElementById('sendBtn').style.opacity='1';
+    document.getElementById('sendBtn').disabled=false;
+    document.getElementById('sendBtn').style.transform='scale(1)';
+    // Auto-complete if all chars typed
+    if(typedChars>=pendingUserText.length){
+      field.innerHTML=shown+'<span class="cursor-blink"></span>';
+    }
+  }
+});
+
+// Send button click
+document.getElementById('sendBtn')?.addEventListener('click',function(){
+  if(waitingForInput&&typedChars>0)sendCurrentMessage();
+});
+
+function goTo(i){document.getElementById('p'+i).scrollIntoView({behavior:'smooth'})}
+
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{
+  if(e.isIntersecting){e.target.querySelectorAll('.rv').forEach(r=>r.classList.add('s'));
+  const idx=[...document.querySelectorAll('.page')].indexOf(e.target);
+  document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('on',i===idx))}
+})},{threshold:.3});
+document.querySelectorAll('.page').forEach(p=>obs.observe(p));
+</script>
+</body>
+</html>
